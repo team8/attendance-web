@@ -4,12 +4,6 @@ var fb = require('../api/firebase')
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   fb.logTime(95034019, 4, '14:00', '18:00')
-//   res.render('logs', { title: 'team8-attendance-web' });
-// });
-
 router.get('/', function (req, res, next) {
   fb.getUsers().then(snapshot => {
     res.render('users', { title: 'Attendance Web', users: snapshot });
