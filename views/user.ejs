@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
@@ -9,11 +10,11 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <style>
-    .a {
-      line-height: 20px;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="path/to/chartjs/dist/Chart.js"></script>
+  <script>
+    var myChart = new Chart(ctx, { ...});
+  </script>
 </head>
 
 <body style="margin-left: 10px; margin-top: 10px; margin-right: 10px">
@@ -37,6 +38,68 @@
     </div>
   </div>
   <br>
+
+  <canvas id="myChart" width="400" height="400"></canvas>
+  
+  <script>
+    var myLineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Date'],
+        datasets: [{
+          label: 'Hours Line',
+          backgroundColor: window.chartColors.red,
+          borderColor: window.chartColors.red,
+          data: [
+            user["logs"][date]["hours"]
+          ],
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Summary'
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 4
+            },
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 4
+            },
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Hours'
+            },
+            layout: {
+              padding: {
+                left: 50,
+                right: 0,
+                top: 0,
+                bottom: 0
+              }
+            }
+          }]
+        }
+      }
+    });
+    window.onload = function () {
+      var ctx = document.getElementById('canvas').getContext('2d');
+      window.myLine = new Chart(ctx, config);
+    };
+  </script>
+
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
@@ -51,8 +114,8 @@
       <tr>
         <td><%= date %></td>
         <td><%= user["logs"][date]["hours"] %></td>
-        <td><%= user["logs"][date]["timein"] %></td>
-        <td><%= user["logs"][date]["timeout"] %></td>
+        <td contenteditable="true"><%= user["logs"][date]["timein"] %></td>
+        <td contenteditable="true"><%= user["logs"][date]["timeout"] %></td>
       </tr>
       <% } %>
     </tbody>
@@ -71,5 +134,6 @@
     crossorigin="anonymous"></script>
 
 </body>
+<!-- <Text>Zach is a bot because...100 more reasons. zach can seeeeeeeeeeeeeeeeeee</Text> -->
 
 </html>

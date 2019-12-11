@@ -23,8 +23,7 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
     </script>
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-  <link href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-
+  <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body style="margin-left: 10px; margin-top: 10px; margin-right: 10px">
@@ -75,9 +74,11 @@
           { "orderable": false },
           { "orderable": false }
         ],
-        "order": [[ 2, "asc" ]],
+        "order": [[2, "asc"]],
         "pageLength": 100
       });
+
+
 
       $('.dataTables_length').addClass('bs-select');
     });
@@ -100,10 +101,14 @@
     .no-sort {
       content: none !important;
     }
+    .paginate_button {
+      padding: 0px !important;
+      border: 0px !important; 
+    }
   </style>
+    
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
 </body>
 
 </html>
