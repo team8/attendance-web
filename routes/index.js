@@ -17,7 +17,7 @@ router.get('/user/:user', function (req, res) {
   });
 });
 
-router.post('/log_hours', function (req, res, next) {
+router.post('/logHours', function (req, res, next) {
   var data = req.body;
   fb.logTime(data.id, data.hours, data.timein, data.timeout);
 });

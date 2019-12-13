@@ -11,17 +11,15 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <script src="path/to/chartjs/dist/Chart.js"></script>
-  <script>
-    var myChart = new Chart(ctx, { ...});
-  </script>
+  <meta name="date" content="<%= JSON.stringify(user['logs']) %>">
 </head>
 
+<br>
 <body style="margin-left: 10px; margin-top: 10px; margin-right: 10px">
   <div class="container-fluid">
     <div class="row">
 
-      <div class="col-md-8 col-sm-6 col-xs-12">
+      <div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 20px">
         <span style="font-size: 20px"><b><%= user["first"] %> <%= user["last"] %></b> | <%= token %></span>
         <div class="a">
           <span><%= user["email"] %><br><%= user["subteam"] %></span>
@@ -34,103 +32,113 @@
         <br>
         <a style="float: right;" class="btn btn-primary" style="color: white" href="/" role="button">Back</a>
       </div>
-
     </div>
   </div>
-  <br>
 
-  <canvas id="myChart" width="400" height="400"></canvas>
-  <script>
-    var myLineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Date'],
-        datasets: [{
-          label: 'Hours Line',
-          backgroundColor: window.chartColors.red,
-          borderColor: window.chartColors.red,
-          data: [
-            user["logs"][date]["hours"]
-          ],
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: 'Summary'
-        },
-        scales: {
-          xAxes: [{
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 4
-            },
-            display: true,
-            scaleLabel: {
-              display: true,
-              labelString: 'Date'
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 4
-            },
-            display: true,
-            scaleLabel: {
-              display: true,
-              labelString: 'Hours'
-            },
-            layout: {
-              padding: {
-                left: 50,
-                right: 0,
-                top: 0,
-                bottom: 0
-              }
-            }
-          }]
+<nav>
+  <div class="nav nav-tabs sticky-top" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+      aria-controls="nav-home" aria-selected="true">Table</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+      aria-controls="nav-profile" aria-selected="false">Chart</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+      <table style="margin-top: 10px" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Hours</th>
+            <th scope="col">Time-in</th>
+            <th scope="col">Time-out</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(var date in user["logs"]) { %>
+          <tr>
+            <td><%= date %></td>
+            <td><%= user["logs"][date]["hours"] %></td>
+            <td contenteditable="true"><%= user["logs"][date]["timein"] %></td>
+            <td contenteditable="true"><%= user["logs"][date]["timeout"] %></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+  </div>
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+      <canvas id="myChart" width="400" height="200"></canvas>
+      <script>
+        var data = JSON.parse(document.getElementsByName('date')[0].getAttribute('content'));
+        console.log(data);
+        var hours = [];
+        var label = [];
+        for (let date in data) {
+          label.push(date);
+          hours.push(data[date]["hours"]);
         }
-      }
-    });
-    window.onload = function () {
-      var ctx = document.getElementById('canvas').getContext('2d');
-      window.myLine = new Chart(ctx, config);
-    };
-  </script>
-
-  <table class="table table-striped">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Date</th>
-        <th scope="col">Hours</th>
-        <th scope="col">Time-in</th>
-        <th scope="col">Time-out</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for(var date in user["logs"]) { %>
-      <tr>
-        <td><%= date %></td>
-        <td><%= user["logs"][date]["hours"] %></td>
-        <td contenteditable="true"><%= user["logs"][date]["timein"] %></td>
-        <td contenteditable="true"><%= user["logs"][date]["timeout"] %></td>
-      </tr>
-      <% } %>
-    </tbody>
-  </table>
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myLineChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: label,
+            datasets: [{
+              label: 'Time',
+              borderColor: 'rgb(255, 99, 132)',
+              data: hours
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Summary'
+            },
+            scales: {
+              xAxes: [{
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 5
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Date'
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 4
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Hours'
+                },
+                layout: {
+                  padding: {
+                    left: 50,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                  }
+                }
+              }]
+            }
+          }
+        });
+      </script>
+  </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </body>
 <!-- <Text>Zach is a bot because...100 more reasons. zach can seeeeeeeeeeeeeeeeeee</Text> -->
